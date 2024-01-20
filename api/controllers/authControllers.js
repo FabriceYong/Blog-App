@@ -11,7 +11,18 @@ export const register = async (req, res, next) => {
     ...req.body,
     password: hashedPassword,
   })
+
+  if(!req.body.username || !req.body.email || !req.body.password || req.body.username === '' || req.body.email === '' || req.body.password === '') return next(handleError(401, 'All fields are required')) 
+
   try {
+    // if user already exists, return error message
+    const user = await User.findOne({ email: req.body.email })
+    if(user) return next(handleError(500, 'User already exists, Please log in or create a different user account'))
+
+    // if username already exists, return error message
+    const username = await User.findOne({ username: req.body.username })
+    if(username) return next(handleError(500, 'User name already taken, Please enter a different username'))
+
     const savedUser = await newUser.save()
     res.status(200).json(savedUser)
   } catch (err) {

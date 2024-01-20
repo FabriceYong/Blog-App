@@ -8,7 +8,7 @@ const Header = () => {
   const path = useLocation().pathname
 
   return (
-    <Navbar className="border-b">
+    <Navbar className="border-b z-1000">
       <Link
         to="/"
         className="self-center whitespace-nowrap text-xl sm:text-2xl font-medium dark:text-white"
@@ -33,7 +33,7 @@ const Header = () => {
         <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
           <FaMoon />
         </Button>
-        <Link to="/sing-in">
+        <Link to="/login">
           <Button gradientDuoTone={'pinkToOrange'} outline>
             Sign In
           </Button>
@@ -42,13 +42,17 @@ const Header = () => {
       </div>
       <Navbar.Collapse>
         <Navbar.Link active={path === '/'} as={'div'}>
-          <Link to="/">Home</Link>
+          <Link to="/" className={path === '/' ? 'text-lg' : ''}>
+            Home
+          </Link>
         </Navbar.Link>
         <Navbar.Link as={'div'} active={path === '/about'}>
-          <Link to={'/about'}>About</Link>
+          <Link to={'/about'} className={path === '/about' ? 'text-lg' : ''}>
+            About
+          </Link>
         </Navbar.Link>
         <Navbar.Link as={'div'} active={path === '/projects'}>
-          <Link to={'/projects'}>Projects</Link>
+          <Link to={'/projects'} className={path === '/projects' ? 'text-lg' : ''}>Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
