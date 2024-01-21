@@ -1,14 +1,22 @@
 import React from 'react'
 import { Button, Navbar, TextInput } from 'flowbite-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
 import { FaMoon } from 'react-icons/fa'
 
 const Header = () => {
+  const navigate = useNavigate()
   const path = useLocation().pathname
 
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser')
+    navigate('/login')
+  }
+
   return (
-    <Navbar className="border-b z-1000">
+    <Navbar className="border-b sticky top-0 z-[1000]">
       <Link
         to="/"
         className="self-center whitespace-nowrap text-xl sm:text-2xl font-medium dark:text-white"
@@ -29,15 +37,25 @@ const Header = () => {
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
         <CiSearch />
       </Button>
-      <div className="flex gap-2 md:order-2">
+      <div className="flex gap-2 md:order-2 items-center">
         <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
           <FaMoon />
         </Button>
-        <Link to="/login">
-          <Button gradientDuoTone={'pinkToOrange'} outline>
-            Sign In
+        {currentUser ? (
+          <Button
+            gradientDuoTone={'pinkToOrange'}
+            outline
+            onClick={handleLogout}
+          >
+            Logout
           </Button>
-        </Link>
+        ) : (
+          <Link to={'/login'}>
+            <Button gradientDuoTone={'pinkToOrange'} outline>
+              Sign In
+            </Button>
+          </Link>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
@@ -52,7 +70,12 @@ const Header = () => {
           </Link>
         </Navbar.Link>
         <Navbar.Link as={'div'} active={path === '/projects'}>
-          <Link to={'/projects'} className={path === '/projects' ? 'text-lg' : ''}>Projects</Link>
+          <Link
+            to={'/projects'}
+            className={path === '/projects' ? 'text-lg' : ''}
+          >
+            Projects
+          </Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>

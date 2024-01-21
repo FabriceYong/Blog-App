@@ -1,10 +1,27 @@
 import React, { useState } from 'react'
-import { Button, TextInput, Label, FloatingLabel } from 'flowbite-react'
+import {
+  Button,
+  TextInput,
+  Label,
+  FloatingLabel,
+  Alert,
+  Spinner,
+} from 'flowbite-react'
 import { FaGoogle, FaEye, FaEyeSlash, FaSignInAlt } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axiosRequest from '../utils/axiosRequest'
+import {
+  HiCheck,
+  HiExclamation,
+  HiInformationCircle,
+  HiX,
+} from 'react-icons/hi'
 
 const SignIn = () => {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -12,9 +29,27 @@ const SignIn = () => {
 
   const { password, email } = formData
 
-  const handleSubmit = (e) => {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
+    try {
+      setLoading(true)
+
+      if (!email || !password) {
+        setError('Please fill in all fields')
+        setLoading(false)
+      }
+
+      const res = await axiosRequest.post('/auth/login', { password, email })
+
+      setError(null)
+      setLoading(false)
+      navigate('/')
+    } catch (error) {
+      setError(error.response.data)
+      setLoading(false)
+    }
   }
 
   const handleChange = (e) => {
@@ -40,8 +75,16 @@ const SignIn = () => {
           </p>
         </div>
         <div className="flex-1">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-
+          {error && (
+            <Alert
+              color="failure"
+              icon={HiInformationCircle}
+              onDismiss={() => setError(null)}
+            >
+              <span className="font-medium">Info alert!</span> {error.message}
+            </Alert>
+          )}
+          <form className="flex flex-col gap-4 mt-3" onSubmit={handleSubmit}>
             <div>
               <FloatingLabel
                 type="email"
@@ -91,8 +134,22 @@ const SignIn = () => {
               </div>
             )}
 
-            <Button gradientDuoTone={'pinkToOrange'} type="submit">
-              <FaSignInAlt className='mr-2 text-lg' />Sign In
+            <Button
+              disabled={loading}
+              gradientDuoTone={'pinkToOrange'}
+              type="submit"
+            >
+              {loading ? (
+                <div className="flex items-center">
+                  <Spinner size={'sm'} />
+                  <span className="ml-2">loading...</span>
+                </div>
+              ) : (
+                <>
+                  <FaSignInAlt className="mr-2 text-lg" />
+                  <span>Sign In</span>
+                </>
+              )}
             </Button>
             <Button gradientDuoTone={'purpleToPink'} outline type="button">
               <FaGoogle className="flex items-start mr-2" />

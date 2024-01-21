@@ -10,14 +10,14 @@ import Projects from './pages/Projects'
 
 // components
 import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import FooterCom from './components/Footer'
 
 const Layout = () => {
   return (
     <>
       <Navbar />
       <Outlet />
-      <Footer />
+      <FooterCom />
     </>
   )
 }
