@@ -17,6 +17,7 @@ import {
   HiInformationCircle,
   HiX,
 } from 'react-icons/hi'
+import Oauth from '../components/Oauth'
 
 const SignUp = () => {
   const navigate = useNavigate()
@@ -53,8 +54,8 @@ const SignUp = () => {
       setError(null)
       setLoading(false)
       navigate('/login')
-    } catch (err) {
-      setError(err.response.data)
+    } catch (error) {
+      setError(error.response.data)
       setLoading(false)
     }
   }
@@ -171,10 +172,7 @@ const SignUp = () => {
                 </>
               )}
             </Button>
-            <Button gradientDuoTone={'purpleToPink'} outline type="button">
-              <FaGoogle className="flex items-start mr-2" />
-              <span>Sign Up with Google Account</span>
-            </Button>
+            <Oauth />
           </form>
           <p className="py-4 font-semibold text-slate-600">
             Already have an account ?{' '}

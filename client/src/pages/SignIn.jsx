@@ -17,6 +17,9 @@ import {
   HiX,
 } from 'react-icons/hi'
 
+import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice'
+import Oauth from '../components/Oauth'
+
 const SignIn = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
@@ -33,15 +36,16 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if(!email || email === '' || !password || password === '') {
+      setError('Please fill in all fields')
+      setLoading(false)
+    }
     try {
       setLoading(true)
-
-      if (!email || !password) {
-        setError('Please fill in all fields')
-        setLoading(false)
-      }
-
       const res = await axiosRequest.post('/auth/login', { password, email })
+
+      localStorage.setItem('currentUser', JSON.stringify(res.data))
 
       setError(null)
       setLoading(false)
@@ -151,10 +155,7 @@ const SignIn = () => {
                 </>
               )}
             </Button>
-            <Button gradientDuoTone={'purpleToPink'} outline type="button">
-              <FaGoogle className="flex items-start mr-2" />
-              <span>Sign In with Google Account</span>
-            </Button>
+            <Oauth />
           </form>
           <p className="py-4 font-semibold text-slate-600">
             Not yet registered ?{' '}

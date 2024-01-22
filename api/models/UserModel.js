@@ -1,22 +1,29 @@
 import mongoose from "mongoose";
 
-const UserSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema(
+  {
     username: {
-        type: String,
-        require: true,
-        unique: true
+      type: String,
+      require: true,
+      unique: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
     },
     password: {
-        type: String,
-        required: true
-    }
-}, {timestamps: true})
+      type: String,
+      required: true,
+    },
+    photo: {
+      type: String,
+      default: 'https://cdn-icons-png.flaticon.com/512/6596/6596121.png',
+    },
+  },
+  { timestamps: true }
+)
 
 const User = mongoose.model('User', UserSchema)
 export default User
