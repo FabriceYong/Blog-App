@@ -53,7 +53,7 @@ const SignUp = () => {
 
       setError(null)
       setLoading(false)
-      navigate('/login')
+      navigate('/')
     } catch (error) {
       setError(error.response.data)
       setLoading(false)
@@ -68,8 +68,8 @@ const SignUp = () => {
   }
 
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex flex-col md:flex-row items-center p-3 md:max-w-3xl xl:max-w-5xl mx-auto gap-8">
+    <div className="min-h-screen mt-20 ">
+      <div className="flex flex-col md:flex-row items-center p-3 md:max-w-3xl xl:max-w-5xl mx-auto gap-8 dark:text-gray-200">
         <div className="mb-4 flex-1">
           <Link className="font-bold text-4xl">
             <span className="py-1 px-2 bg-gradient-to-r from-red-600 via-orange-500 to-pink-500 rounded-lg text-slate-100 ">
@@ -77,7 +77,7 @@ const SignUp = () => {
             </span>
             Blog
           </Link>
-          <p className="text-slate-700 font-semibold text-sm mt-4">
+          <p className="text-slate-700 font-semibold text-sm mt-4 dark:text-gray-200">
             This is a demo project, you can sign up with your email and password
             or with Google
           </p>
@@ -101,6 +101,7 @@ const SignUp = () => {
                 value={username}
                 sizing="md"
                 id="username"
+                className="dark:text-gray-200"
                 onChange={handleChange}
               />
               {/* <TextInput type="text" id='username' placeholder="John Doe" /> */}
@@ -114,6 +115,7 @@ const SignUp = () => {
                 value={email}
                 sizing="md"
                 id="email"
+                className="dark:text-gray-200"
                 onChange={handleChange}
               />
               {/* <TextInput type="email" id='email' placeholder="email@example.com" /> */}
@@ -128,10 +130,11 @@ const SignUp = () => {
                   value={password}
                   sizing="md"
                   id="password"
+                  className="dark:text-gray-200"
                   onChange={handleChange}
                 />
                 {/* <TextInput type="text" id='password' /> */}
-                <FaEyeSlash
+                <FaEye
                   className="absolute top-4 right-3"
                   onClick={() => setShowPassword(!showPassword)}
                 />
@@ -145,10 +148,11 @@ const SignUp = () => {
                   value={password}
                   sizing="md"
                   id="password"
+                  className="dark:text-gray-200"
                   onChange={handleChange}
                 />
                 {/* <TextInput type="text" id='password' /> */}
-                <FaEye
+                <FaEyeSlash
                   className="absolute top-4 right-3"
                   onClick={() => setShowPassword(!showPassword)}
                 />
@@ -174,9 +178,9 @@ const SignUp = () => {
             </Button>
             <Oauth />
           </form>
-          <p className="py-4 font-semibold text-slate-600">
+          <p className="py-4 font-semibold text-slate-600 dark:text-gray-200">
             Already have an account ?{' '}
-            <Link to={'/login'} className="underline text-purple-600">
+            <Link to={'/login'} className="underline text-purple-600 dark:text-purple-300">
               Login here
             </Link>
           </p>

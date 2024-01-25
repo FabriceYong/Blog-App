@@ -1,18 +1,24 @@
 import React from 'react'
-import { Button, Navbar, TextInput } from 'flowbite-react'
+import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
-import { FaMoon } from 'react-icons/fa'
+import { FaMoon, FaSun } from 'react-icons/fa'
+import { useGlobalContext } from '../Context'
 
 const Header = () => {
   const navigate = useNavigate()
   const path = useLocation().pathname
+  const { theme, setTheme } = useGlobalContext()
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser')
     navigate('/login')
+  }
+
+  const changeTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light')
   }
 
   return (
@@ -34,21 +40,49 @@ const Header = () => {
           className="hidden lg:inline"
         />
       </form>
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
+      <Button className="w-12 h-10 lg:hidden p-0" color="gray" pill>
         <CiSearch />
       </Button>
       <div className="flex gap-2 md:order-2 items-center">
-        <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
-          <FaMoon />
-        </Button>
-        {currentUser ? (
+        {theme === 'light' ? (
           <Button
-            gradientDuoTone={'pinkToOrange'}
-            outline
-            onClick={handleLogout}
+            className="w-12 h-10 hidden sm:inline p-0"
+            color="gray"
+            pill
+            onClick={changeTheme}
           >
-            Logout
+            <FaMoon />
           </Button>
+        ) : (
+          <Button
+            className="w-12 h-10 hidden sm:inline p-0"
+            color="gray"
+            pill
+            onClick={changeTheme}
+          >
+            <FaSun />
+          </Button>
+        )}
+
+        {currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={<Avatar alt="user" img={currentUser.photo} rounded />}
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">@{currentUser.username}</span>
+              <span className="block text-sm font-medium truncate">
+                {currentUser.email}
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Divider />
+            <Link to={'/dashboard?tab=profile'}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={handleLogout}>Sign Out</Dropdown.Item>
+          </Dropdown>
         ) : (
           <Link to={'/login'}>
             <Button gradientDuoTone={'pinkToOrange'} outline>

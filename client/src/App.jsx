@@ -11,6 +11,7 @@ import Projects from './pages/Projects'
 // components
 import Navbar from './components/Navbar'
 import FooterCom from './components/Footer'
+import PrivateRoute from './components/PrivateRoute'
 
 const Layout = () => {
   return (
@@ -29,34 +30,44 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />
+        element: <Home />,
       },
       {
         path: '/login',
-        element: <SignIn />
+        element: <SignIn />,
       },
       {
         path: '/register',
         element: <SignUp />,
       },
       {
-        path: '/about',
-        element: <About />
+        element: <PrivateRoute />,
+        children: [
+          {
+            path: '/about',
+            element: <About />,
+          },
+        ],
+      },
+      {
+        element: <PrivateRoute />,
+        children: [
+          
+        ]
       },
       {
         path: '/dashboard',
         element: <Dashboard />,
       },
-    {
-      path: '/projects',
-      element: <Projects />,
-    },
-    ]
-  }
+      {
+        path: '/projects',
+        element: <Projects />,
+      },
+    ],
+  },
 ])
 
 function App() {
-
   return (
     <>
       <RouterProvider router={router} />
