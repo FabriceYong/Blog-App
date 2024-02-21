@@ -69,7 +69,7 @@ export const login = async (req, res, next) => {
       )
       if (verifyPassword) {
         // token
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
 
         // user cookie
         res.cookie('access_token', token, { httpOnly: true })
@@ -91,7 +91,7 @@ export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email })
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+      const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
       res.cookie('access_token', token, { httpOnly: true })
       const { password: pass, ...rest } = user._doc
       res.status(200).json(rest)
@@ -115,7 +115,7 @@ export const google = async (req, res, next) => {
       })
       // create user cookie and save user
       await newUser.save()
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET)
+      const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET)
       res.cookie('access_token', token, { httpOnly: true })
       const { password: pass, ...rest } = newUser._doc
       res.status(200).json(rest)
@@ -127,7 +127,7 @@ export const google = async (req, res, next) => {
 
 export const logout = (req, res, next) => {
   res
-    .clearCookie('access_token', { sameSite: 'none', secure: true })
+    .clearCookie('access_token')
     .status(200)
     .json({ message: 'Logged out successfully' })
 }

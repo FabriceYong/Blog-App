@@ -4,17 +4,26 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { useGlobalContext } from '../Context'
+import axiosRequest from '../utils/axiosRequest'
 
 const Header = () => {
   const navigate = useNavigate()
   const path = useLocation().pathname
   const { theme, setTheme } = useGlobalContext()
 
+  // const currentUser = JSON.parse(localStorage.getItem('currentUser'))
   const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-  const handleLogout = () => {
-    localStorage.removeItem('currentUser')
-    navigate('/login')
+  const handleLogout = async () => {
+    try {
+      if (currentUser) {
+        await axiosRequest.post('/auth/logout')
+        localStorage.removeItem('currentUser')
+      }
+      navigate('/login')
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   const changeTheme = () => {
@@ -68,18 +77,23 @@ const Header = () => {
           <Dropdown
             arrowIcon={false}
             inline
-            label={<Avatar alt="user" img={currentUser.photo} rounded />}
+            label={<Avatar alt="user" img={currentUser?.photo} rounded />}
           >
             <Dropdown.Header>
-              <span className="block text-sm">@{currentUser.username}</span>
+              <span className="block text-sm">@{currentUser?.username}</span>
               <span className="block text-sm font-medium truncate">
-                {currentUser.email}
+                {currentUser?.email}
               </span>
             </Dropdown.Header>
             <Dropdown.Divider />
             <Link to={'/dashboard?tab=profile'}>
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
+            {currentUser.isAdmin && (
+              <Link to='/dashboard'>
+                <Dropdown.Item>Dashboard</Dropdown.Item>
+              </Link>
+            )}
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleLogout}>Sign Out</Dropdown.Item>
           </Dropdown>

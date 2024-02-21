@@ -7,11 +7,15 @@ import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Dashboard from './pages/Dashboard'
 import Projects from './pages/Projects'
+import CreatePost from './pages/CreatePost'
 
 // components
 import Navbar from './components/Navbar'
 import FooterCom from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
+import AdminPrivateRoute from './components/AdminPrivateRoute'
+import UpdatePost from './components/UpdatePost'
+
 
 const Layout = () => {
   return (
@@ -52,12 +56,24 @@ const router = createBrowserRouter([
       {
         element: <PrivateRoute />,
         children: [
-          
-        ]
+          {
+            path: '/dashboard',
+            element: <Dashboard />,
+          },
+        ],
       },
       {
-        path: '/dashboard',
-        element: <Dashboard />,
+        element: <AdminPrivateRoute />,
+        children: [
+          {
+            path: '/create-post',
+            element: <CreatePost />,
+          },
+          {
+            path: 'update-post/:postId',
+            element: <UpdatePost />,
+          },
+        ],
       },
       {
         path: '/projects',

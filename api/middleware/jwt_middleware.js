@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import handleError from '../config/errorHandler'
+import handleError from '../config/errorHandler.js'
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.access_token
@@ -8,6 +8,7 @@ export const verifyToken = (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
         if(err) return next(handleError(401, 'Invalid token'))
 
-        req.userId = payload.id
+        req.user = payload
+        next()
     })
 }

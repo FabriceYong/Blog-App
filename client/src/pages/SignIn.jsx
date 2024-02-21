@@ -51,7 +51,7 @@ const SignIn = () => {
       setLoading(false)
       navigate('/')
     } catch (error) {
-      setError(error.response.data)
+      setError(error?.response?.data)
       setLoading(false)
     }
   }
@@ -149,7 +149,7 @@ const SignIn = () => {
               {loading ? (
                 <div className="flex items-center">
                   <Spinner size={'sm'} />
-                  <span className="ml-2">loading...</span>
+                  <span className="ml-2">Please wait...</span>
                 </div>
               ) : (
                 <>

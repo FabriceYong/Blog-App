@@ -10,3 +10,11 @@ button:active {
     transition: all 200ms ease-in-out;
     transform: scale(.98);
 }
+
+body {
+    @apply h-screen
+}
+
+.ql-editor {
+    @apply text-[1.05rem]
+}

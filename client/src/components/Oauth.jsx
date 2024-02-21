@@ -31,7 +31,7 @@ const Oauth = () => {
       setLoading(false)
       navigate('/')
     } catch (error) {
-      setError(error.response.data)
+      setError(error?.response?.data)
       setLoading(false)
     }
   }

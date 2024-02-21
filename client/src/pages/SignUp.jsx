@@ -51,12 +51,16 @@ const SignUp = () => {
 
       localStorage.setItem('currentUser', JSON.stringify(res.data))
 
+      if(!res.ok){
+        setError(res.data.message)
+        setLoading(false)
+      }
+
       setError(null)
       setLoading(false)
       navigate('/')
     } catch (error) {
-      setError(error.response.data)
-      setLoading(false)
+      setError(error)
     }
   }
 
@@ -167,7 +171,7 @@ const SignUp = () => {
               {loading ? (
                 <div className="flex items-center">
                   <Spinner size={'sm'} />
-                  <span className="ml-2">loading...</span>
+                  <span className="ml-2">Please wait...</span>
                 </div>
               ) : (
                 <>

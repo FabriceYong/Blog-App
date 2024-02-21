@@ -3,8 +3,13 @@ import connectDB from './utils/db.js'
 import 'dotenv/config.js'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import authRoutes from './routes/authRoutes.js'
 import cookieParser from 'cookie-parser'
+
+//routes
+import authRoutes from './routes/authRoutes.js'
+import userRoute from './routes/userRoute.js'
+import postRoute from './routes/postRoute.js'
+
 
 
 const app = express()
@@ -28,6 +33,8 @@ app.use(cookieParser())
 
 //routes
 app.use('/api/auth', authRoutes)
+app.use('/api/user', userRoute)
+app.use('/api/post', postRoute)
 
 
 
