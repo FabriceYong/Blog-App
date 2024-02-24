@@ -15,6 +15,7 @@ import FooterCom from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
 import AdminPrivateRoute from './components/AdminPrivateRoute'
 import UpdatePost from './components/UpdatePost'
+import PostPage from './pages/PostPage'
 
 
 const Layout = () => {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
       {
         path: '/projects',
         element: <Projects />,
+      },
+      {
+        path: '/post/:postSlug',
+        element: <PostPage />
       },
     ],
   },

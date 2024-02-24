@@ -103,7 +103,7 @@ const DashProfile = () => {
   }
 
   useEffect(() => {
-    if(imageFile) {
+    if (imageFile) {
       uploadImage()
     }
   }, [imageFile])
@@ -120,7 +120,7 @@ const DashProfile = () => {
       setLoading(false)
     }
 
-    if(imageFileUploading) {
+    if (imageFileUploading) {
       setUpdateUserError('Image still uploading, Please wait!')
       return
     }
@@ -134,18 +134,17 @@ const DashProfile = () => {
         formData
       )
 
-      let user = localStorage.getItem('currentUser')
-      if (user) {
-        user = localStorage.setItem(JSON.stringify('currentUser', res.data))
-      }
-      // JSON.stringify(localStorage.setItem('currentUser', res.data))
+      JSON.stringify(localStorage.setItem('updatedUser', res.data))
 
       setUpdateUserSuccess('User info updated successfully')
       setError(null)
       setLoading(false)
+      setUpdateUserError(null)
     } catch (error) {
-      setError(error)
+      setError(error.response.data)
       setLoading(false)
+      setUpdateUserError(null)
+      setUpdateUserSuccess(null)
     }
   }
 
@@ -155,11 +154,10 @@ const DashProfile = () => {
       setLoading(true)
       setError(null)
       const res = await axiosRequest.delete(`/user/delete/${currentUser._id}`)
+
+      setError(null)
+      setLoading(false)
       localStorage.removeItem('currentUser')
-      if (!res.ok) {
-        setError(res.data.message)
-        setLoading(false)
-      }
     } catch (error) {
       setError(error.response.data)
       setLoading(false)

@@ -58,7 +58,7 @@ const DashUsers = () => {
     try {
       setDeleteSuccess(false)
       const res = await axiosRequest.delete(
-        `/user/delete/${userIdToDelete}}`
+        `/user/delete/${userIdToDelete}`
       )
 
         setUsers((prev) =>
