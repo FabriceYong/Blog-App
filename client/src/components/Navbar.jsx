@@ -11,14 +11,13 @@ const Header = () => {
   const path = useLocation().pathname
   const { theme, setTheme } = useGlobalContext()
 
-  // const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
 
   const handleLogout = async () => {
     try {
       if (currentUser) {
         await axiosRequest.post('/auth/logout')
-        localStorage.removeItem('currentUser')
+        sessionStorage.removeItem('currentUser')
       }
       navigate('/login')
     } catch (error) {

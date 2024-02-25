@@ -25,7 +25,7 @@ const Oauth = () => {
         photo: resultsFromGoogle.user.photoURL,
       })
 
-      localStorage.setItem('currentUser', JSON.stringify(res.data))
+      sessionStorage.setItem('currentUser', JSON.stringify(res.data))
       
       setError(null)
       setLoading(false)

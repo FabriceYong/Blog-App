@@ -5,31 +5,30 @@ import { Button, Spinner } from 'flowbite-react'
 import CallToAction from '../components/CallToAction'
 
 const PostPage = () => {
-    const { postSlug } = useParams()
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [post, setPost] = useState(null)
+  const { postSlug } = useParams()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [post, setPost] = useState(null)
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            try{
-                setLoading(true)
-                const res = await axiosRequest.get(`/post/get-posts?slug=${postSlug}`)
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        setLoading(true)
+        const res = await axiosRequest.get(`/post/get-posts?slug=${postSlug}`)
 
-                setPost(res.data.posts[0])
-                setError(false)
-                setLoading(false)
+        setPost(res.data.posts[0])
+        setError(false)
+        setLoading(false)
+      } catch (error) {
+        setError(error.response.data)
+        setLoading(false)
+      }
+    }
 
-            }catch(error){
-                setError(error.response.data)
-                setLoading(false)
-            }
-        }
-
-        fetchPost()
-    }, [postSlug])
+    fetchPost()
+  }, [postSlug])
   return (
-    <div className="dark:text-gray-200">
+    <div className="dark:text-gray-200 h-f">
       {loading ? (
         <div className="flex items-center gap-3 my-4 justify-center min-h-screen">
           <Spinner
@@ -39,13 +38,13 @@ const PostPage = () => {
           />
         </div>
       ) : error ? (
-        <p className="text-center text-gray-600 text-3xl font-medium">
+        <p className="text-center py-6 text-gray-600 text-2xl font-medium">
           Sorry? There was an error fetching the post, refresh or try again
           later
         </p>
       ) : (
         <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
-          <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
+          <h1 className="text-6xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl capitalize">
             {post?.title}
           </h1>
           <Link
@@ -72,8 +71,9 @@ const PostPage = () => {
             dangerouslySetInnerHTML={{ __html: post?.content }}
           ></div>
 
-            <div className="max-w-4xl mx-auto w-full"><CallToAction /></div>
-          
+          <div className="max-w-4xl mx-auto w-full">
+            <CallToAction />
+          </div>
         </main>
       )}
     </div>

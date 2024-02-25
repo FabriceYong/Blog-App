@@ -7,7 +7,7 @@ import { MdDelete } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
 
 const DashPosts = () => {
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
   const [userPosts, setUserPost] = useState([])
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -46,10 +46,9 @@ const DashPosts = () => {
         `/post/get-posts?userId=${currentUser._id}&startIndex=${startIndex}`
       )
 
-      if (res.ok) {
         setUserPost((prev) => [...prev, ...res.data.posts])
         if (res.data.posts.length < 9) setShowMore(false)
-      }
+      
     } catch (error) {
       console.log(error.message)
     }
@@ -111,7 +110,7 @@ const DashPosts = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <Link
-                      className="font-medium text-gray-800 dark:text-gray-100"
+                      className="font-medium hover:underline text-gray-800 dark:text-gray-100"
                       to={`/post/${post.slug}`}
                     >
                       {post.title}

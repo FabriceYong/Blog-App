@@ -82,18 +82,18 @@ const CreatePost = () => {
 
   return (
     <div className="min-h-screen p-3 mx-auto max-w-3xl dark:text-gray-200">
-      <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
+      <h1 className="text-center text-4xl my-7 font-semibold">Create a post</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         {publishError && (
           <Alert
-          color="failure"
-          icon={HiInformationCircle}
-          onDismiss={() => setPublishError(null)}
-        >
-          <span className="font-medium">Info alert!</span> {publishError}
-        </Alert>
+            color="failure"
+            icon={HiInformationCircle}
+            onDismiss={() => setPublishError(null)}
+          >
+            <span className="font-medium">Info alert!</span> {publishError}
+          </Alert>
         )}
-        
+
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -114,6 +114,19 @@ const CreatePost = () => {
             <option value="javascript">Javascript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
+            <option value="health">Health & Fitness</option>
+            <option value="social">Social</option>
+            <option value="psychology">Psychology</option>
+            <option value="media">Media</option>
+            <option value="tech">Tech</option>
+            <option value="eduction">Education</option>
+            <option value="politics">Politics</option>
+            <option value="history">History</option>
+            <option value="travel">Travel</option>
+            <option value="science">Science</option>
+            <option value="photography">Photography</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="sports">Sports</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-orange-500 border-dotted p-3">
@@ -157,18 +170,14 @@ const CreatePost = () => {
             className="w-full h-72 object-cover"
           />
         )}
-        <ReactQuill theme='snow' id='content' placeholder='Write something...' className='h-72 mb-12' required onChange={(value) => setFormData({ ...formData, content: value})} />
-        {/* <textarea
+        <ReactQuill
+          theme="snow"
           id="content"
-          cols="30"
-          rows="10"
-          placeholder="Write Something..."
+          placeholder="Write something..."
+          className="h-72 mb-12"
           required
-          onChange={(e) =>
-            setFormData({ ...formData, content: e.target.value })
-          }
-          className=" p-3 dark:bg-gray-800 dark:text-gray-200 border-4 border-orange-500 border-dotted"
-        ></textarea> */}
+          onChange={(value) => setFormData({ ...formData, content: value })}
+        />
         <Button type="submit" gradientDuoTone={'purpleToPink'}>
           Publish
         </Button>

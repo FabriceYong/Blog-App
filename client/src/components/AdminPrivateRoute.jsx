@@ -3,7 +3,7 @@ import CreatePost from '../pages/CreatePost'
 import { Navigate, Outlet } from 'react-router-dom'
 
 const AdminPrivateRoute = () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
   return currentUser?.isAdmin ? <Outlet /> : <Navigate to='/login' />
 }
 

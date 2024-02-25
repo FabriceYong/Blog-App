@@ -17,13 +17,13 @@ const DashSidebar = () => {
     if (tabFromUrl) setTab(tabFromUrl)
   }, [location.search])
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
 
   const handleSignOut = async () => {
     try {
       if (currentUser) {
         const res = await axiosRequest.post('/auth/logout')
-        localStorage.removeItem('currentUser')
+        sessionStorage.removeItem('currentUser')
       }
       navigate('/login')
     } catch (error) {

@@ -7,7 +7,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 
 const DashUsers = () => {
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
   const [users, setUsers] = useState([])
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)

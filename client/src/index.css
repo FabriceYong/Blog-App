@@ -27,25 +27,29 @@ body {
     font-size: 1.7rem;
     font-weight: 700;
     font-family: sans-serif;
+    text-transform: capitalize;
 }
 
 .post-content h2 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-family: sans-serif;
     margin: 1rem 0;
+    text-transform: capitalize;
 }
 
 .post-content h3 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-family: sans-serif;
     margin: .8rem 0;
+    text-transform: capitalize;
 
 }
 
 .post-content h4 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-family: sans-serif;
     margin: .8rem 0;
+    text-transform: capitalize;
 }
 
 .post-content a {

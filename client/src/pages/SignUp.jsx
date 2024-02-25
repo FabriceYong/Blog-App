@@ -49,18 +49,14 @@ const SignUp = () => {
         username,
       })
 
-      localStorage.setItem('currentUser', JSON.stringify(res.data))
-
-      if(!res.ok){
-        setError(res.data.message)
-        setLoading(false)
-      }
+      sessionStorage.setItem('currentUser', JSON.stringify(res.data))
 
       setError(null)
       setLoading(false)
       navigate('/')
     } catch (error) {
-      setError(error)
+      setError(error.response.data)
+      setLoading(false)
     }
   }
 
@@ -70,6 +66,7 @@ const SignUp = () => {
       [e.target.id]: e.target.value.trim(),
     })
   }
+
 
   return (
     <div className="min-h-screen mt-20 ">

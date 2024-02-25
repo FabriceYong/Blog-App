@@ -87,7 +87,7 @@ export const deletePost = async (req, res, next) => {
 
 // update post functionality
 export const updatePost = async (req, res, next) => {
-  if (!req.user.isAdmin || !req.user.id !== req.params.userId)
+  if (!req.user.isAdmin || req.user.id !== req.params.userId)
     return next(handleError(403, 'You are not allowed to update this post'))
 
   try {

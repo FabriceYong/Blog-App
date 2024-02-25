@@ -28,14 +28,14 @@ const DashProfile = () => {
   const [error, setError] = useState(null)
   const [formData, setFormData] = useState({})
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
 
   const handleSignOut = async () => {
     try {
       setLoading(true)
       const res = await axiosRequest.post('/auth/logout')
 
-      localStorage.removeItem('currentUser')
+      sessionStorage.removeItem('currentUser')
 
       navigate('/login')
       setError(null)
@@ -134,7 +134,7 @@ const DashProfile = () => {
         formData
       )
 
-      JSON.stringify(localStorage.setItem('updatedUser', res.data))
+      JSON.stringify(sessionStorage.setItem('updatedUser', res.data))
 
       setUpdateUserSuccess('User info updated successfully')
       setError(null)
@@ -157,7 +157,7 @@ const DashProfile = () => {
 
       setError(null)
       setLoading(false)
-      localStorage.removeItem('currentUser')
+      sessionStorage.removeItem('currentUser')
     } catch (error) {
       setError(error.response.data)
       setLoading(false)

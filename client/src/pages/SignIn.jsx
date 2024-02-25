@@ -32,7 +32,7 @@ const SignIn = () => {
 
   const { password, email } = formData
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -45,7 +45,7 @@ const SignIn = () => {
       setLoading(true)
       const res = await axiosRequest.post('/auth/login', { password, email })
 
-      localStorage.setItem('currentUser', JSON.stringify(res.data))
+      sessionStorage.setItem('currentUser', JSON.stringify(res.data))
 
       setError(null)
       setLoading(false)

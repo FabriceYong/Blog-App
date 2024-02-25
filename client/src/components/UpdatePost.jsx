@@ -32,7 +32,7 @@ const UpdatePost = () => {
   const [loading, setLoading] = useState(false)
 
   const { postId } = useParams()
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
 
   useEffect(() => {
     try {
@@ -40,18 +40,13 @@ const UpdatePost = () => {
       const fetchPost = async () => {
         const res = await axiosRequest.get(`/post/get-posts?postId=${postId}`)
 
-        if (res.data.success === false) {
-          setPublishError(res.data.message)
-          setLoading(false)
-        } else {
           setFormData(res.data.posts[0])
           setPublishError(null)
           setLoading(false)
-        }
       }
       fetchPost()
     } catch (error) {
-      setPublishError(error)
+      setPublishError(error.response.data || 'Something went wrong')
       setLoading(false)
     }
   }, [postId])
@@ -95,33 +90,30 @@ const UpdatePost = () => {
     }
   }
 
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
       setLoading(true)
       const res = await axiosRequest.put(
-        `/post/update-post/${formData._id}/${currentUser._id}`,
+        `/post/update-post/${postId}/${currentUser._id}`,
         formData
       )
-
-      if (res.data.success === false) {
-        setPublishError(res.data.message)
-        setLoading(false)
-      }
 
       setPublishError(null)
       setLoading(false)
       navigate(`/post/${res.data.slug}`)
+
     } catch (error) {
-      setPublishError('Something went wrong')
+      setPublishError(error.response.data || 'Something went wrong')
       setLoading(false)
     }
   }
 
   return (
     <div className="min-h-screen p-3 mx-auto max-w-3xl dark:text-gray-200">
-      <h1 className="text-center text-3xl my-7 font-semibold">Udate post</h1>
+      <h1 className="text-center text-4xl my-7 font-semibold">Update post</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         {publishError && (
           <Alert
@@ -129,7 +121,7 @@ const UpdatePost = () => {
             icon={HiInformationCircle}
             onDismiss={() => setPublishError(null)}
           >
-            <span className="font-medium">Info alert!</span> {publishError}
+            <span className="font-medium">Info alert!</span> {publishError.message}
           </Alert>
         )}
 
@@ -137,7 +129,7 @@ const UpdatePost = () => {
           <TextInput
             type="text"
             id="title"
-            defaultValue={formData.title}
+            value={formData.title}
             required
             placeholder="Title"
             className="dark:text-gray-200 flex-1"
@@ -146,7 +138,7 @@ const UpdatePost = () => {
             }
           />
           <Select
-            defaultValue={formData.category}
+            value={formData.category}
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
@@ -155,6 +147,19 @@ const UpdatePost = () => {
             <option value="javascript">Javascript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
+            <option value="health">Health & Fitness</option>
+            <option value="social">Social</option>
+            <option value="psychology">Psychology</option>
+            <option value="media">Media</option>
+            <option value="tech">Tech</option>
+            <option value="eduction">Education</option>
+            <option value="politics">Politics</option>
+            <option value="history">History</option>
+            <option value="travel">Travel</option>
+            <option value="science">Science</option>
+            <option value="photography">Photography</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="sports">Sports</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-orange-500 border-dotted p-3">
@@ -191,7 +196,7 @@ const UpdatePost = () => {
             )}
           </Button>
         </div>
-        {formData.image && (
+        { formData.image && (
           <img
             src={formData.image}
             alt="post image"
@@ -207,17 +212,6 @@ const UpdatePost = () => {
           required
           onChange={(value) => setFormData({ ...formData, content: value })}
         />
-        {/* <textarea
-          id="content"
-          cols="30"
-          rows="10"
-          placeholder="Write Something..."
-          required
-          onChange={(e) =>
-            setFormData({ ...formData, content: e.target.value })
-          }
-          className=" p-3 dark:bg-gray-800 dark:text-gray-200 border-4 border-orange-500 border-dotted"
-        ></textarea> */}
         <Button
           disabled={loading}
           type="submit"
