@@ -202,8 +202,8 @@ const DashProfile = () => {
           <img
             src={imageFileUrl || currentUser?.photo}
             alt="profile picture"
-            className={`rounded-full w-full h-full object-cover border-8 border-[light-gray] ${
-              imageFileUploadProgress < 100 && 'opacity-60'
+            className={`rounded-full w-full h-full object-cover border-8 border-gray-200 ${
+              (imageFileUploadProgress > 0 && imageFileUploadProgress < 100) && 'opacity-60'
             }`}
             onClick={() => fileRef.current.click()}
           />

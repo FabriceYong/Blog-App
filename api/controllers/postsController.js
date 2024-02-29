@@ -1,5 +1,6 @@
 import handleError from '../config/errorHandler.js'
 import Post from '../models/postModel.js'
+import User from '../models/userModel.js'
 
 export const create = async (req, res, next) => {
   if (!req.user.isAdmin)

@@ -16,11 +16,13 @@ import PrivateRoute from './components/PrivateRoute'
 import AdminPrivateRoute from './components/AdminPrivateRoute'
 import UpdatePost from './components/UpdatePost'
 import PostPage from './pages/PostPage'
+import ScrollToTop from './components/ScrollToTop'
 
 
 const Layout = () => {
   return (
     <>
+      <ScrollToTop />
       <Navbar />
       <Outlet />
       <FooterCom />

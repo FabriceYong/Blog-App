@@ -47,7 +47,7 @@ const DashPosts = () => {
       )
 
         setUserPost((prev) => [...prev, ...res.data.posts])
-        if (res.data.posts.length < 9) setShowMore(false)
+        if (res.data.posts.length > 9) setShowMore(true)
       
     } catch (error) {
       console.log(error.message)
@@ -110,7 +110,7 @@ const DashPosts = () => {
                   </Table.Cell>
                   <Table.Cell>
                     <Link
-                      className="font-medium hover:underline text-gray-800 dark:text-gray-100"
+                      className="font-medium hover:underline text-gray-800 dark:text-gray-100 capitalize"
                       to={`/post/${post.slug}`}
                     >
                       {post.title}
@@ -139,7 +139,7 @@ const DashPosts = () => {
               </Table.Body>
             ))}
           </Table>
-          {userPosts.length > 9 && (
+          {showMore && (
             <button
               onClick={handleShowMore}
               className="w-full text-teal-500 self-center text-sm py-7"

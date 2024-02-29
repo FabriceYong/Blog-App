@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom'
 import axiosRequest from '../utils/axiosRequest'
 import { Button, Spinner } from 'flowbite-react'
 import CallToAction from '../components/CallToAction'
+import Comments from '../components/Comments'
 
 const PostPage = () => {
   const { postSlug } = useParams()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [post, setPost] = useState(null)
+  const [showMoreText, setShowMoreText] = useState(false)
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -27,6 +29,11 @@ const PostPage = () => {
 
     fetchPost()
   }, [postSlug])
+
+
+  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
+  const createdBy = currentUser?._id === post?.userId
+
   return (
     <div className="dark:text-gray-200 h-f">
       {loading ? (
@@ -44,7 +51,7 @@ const PostPage = () => {
         </p>
       ) : (
         <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
-          <h1 className="text-6xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl capitalize">
+          <h1 className="text-6xl mt-10 p-3 text-center font-serif max-w-3xl mx-auto lg:text-4xl capitalize">
             {post?.title}
           </h1>
           <Link
@@ -62,18 +69,41 @@ const PostPage = () => {
           />
           <div className="flex justify-between p-3 border-b border-slate-300 mx-auto w-full mx-w-2xl text-xs font-medium">
             <span>{new Date(post?.createdAt).toLocaleDateString()}</span>
+            {createdBy && <span className='italic'>create by: {currentUser.username}</span> }
             <span className="italic">
               {(post?.content.length / 1000).toFixed(0)}mins read
             </span>
           </div>
-          <div
-            className="p-3 max-w-2xl mx-auto w-full post-content"
-            dangerouslySetInnerHTML={{ __html: post?.content }}
-          ></div>
+          <div className="flex flex-col items-center">
+            {showMoreText ? (
+              <div
+                className="p-3 max-w-2xl mx-auto w-full post-content"
+                dangerouslySetInnerHTML={{
+                  __html: post?.content,
+                }}
+              ></div>
+            ) : (
+              <div
+                className="p-3 max-w-2xl mx-auto w-full post-content"
+                dangerouslySetInnerHTML={{
+                  __html: post?.content.slice(0, 2000) + `<span>...</span>`,
+                }}
+              ></div>
+            )}
+            {!showMoreText && (
+               <span
+              onClick={() => setShowMoreText(true)}
+              className="uppercase font-medium text-blue-500 cursor-pointer opacity-80"
+            >
+              continue reading...
+            </span>
+            )}
+          </div>
 
           <div className="max-w-4xl mx-auto w-full">
             <CallToAction />
           </div>
+          <Comments postId={post._id} />
         </main>
       )}
     </div>

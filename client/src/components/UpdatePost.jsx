@@ -94,12 +94,18 @@ const UpdatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+      // if(Object.keys(formData).length === 0) {
+      //   console.log('No changes made')
+      // }
+
     try {
       setLoading(true)
       const res = await axiosRequest.put(
         `/post/update-post/${postId}/${currentUser._id}`,
         formData
       )
+
+
 
       setPublishError(null)
       setLoading(false)
@@ -158,6 +164,7 @@ const UpdatePost = () => {
             <option value="travel">Travel</option>
             <option value="science">Science</option>
             <option value="photography">Photography</option>
+            <option value="business">Business</option>
             <option value="entertainment">Entertainment</option>
             <option value="sports">Sports</option>
           </Select>
