@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axiosRequest from '../utils/axiosRequest'
-import { Button, Spinner } from 'flowbite-react'
+import { Button, Spinner, Alert } from 'flowbite-react'
 import CallToAction from '../components/CallToAction'
 import Comments from '../components/Comments'
+import { HiInformationCircle } from 'react-icons/hi'
 
 const PostPage = () => {
   const { postSlug } = useParams()
@@ -11,6 +12,7 @@ const PostPage = () => {
   const [error, setError] = useState(null)
   const [post, setPost] = useState(null)
   const [showMoreText, setShowMoreText] = useState(false)
+  const [createdBy, setCreatedBy] = useState({})
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -22,7 +24,7 @@ const PostPage = () => {
         setError(false)
         setLoading(false)
       } catch (error) {
-        setError(error.response.data)
+        setError(error.response?.data || 'Something went wrong!')
         setLoading(false)
       }
     }
@@ -31,11 +33,21 @@ const PostPage = () => {
   }, [postSlug])
 
 
-  const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
-  const createdBy = currentUser?._id === post?.userId
+  useEffect(() => {
+    const createdBy = async () => {
+      try {
+        const res = await axiosRequest.get(`/user/${post.userId}`)
+        setCreatedBy(res.data)
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+     createdBy()
+  }, [post])
+
 
   return (
-    <div className="dark:text-gray-200 h-f">
+    <div className="dark:text-gray-200">
       {loading ? (
         <div className="flex items-center gap-3 my-4 justify-center min-h-screen">
           <Spinner
@@ -45,9 +57,15 @@ const PostPage = () => {
           />
         </div>
       ) : error ? (
-        <p className="text-center py-6 text-gray-600 text-2xl font-medium">
-          Sorry? There was an error fetching the post, refresh or try again
-          later
+        <p className="text-center py-6 text-lg text-red-500 font-medium">
+          <Alert
+            color="failure"
+            icon={HiInformationCircle}
+            onDismiss={() => setError(null)}
+          >
+            <span className="font-medium">Info alert!</span> Could not load this
+            post, refresh or try again later
+          </Alert>
         </p>
       ) : (
         <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
@@ -69,7 +87,9 @@ const PostPage = () => {
           />
           <div className="flex justify-between p-3 border-b border-slate-300 mx-auto w-full mx-w-2xl text-xs font-medium">
             <span>{new Date(post?.createdAt).toLocaleDateString()}</span>
-            {createdBy && <span className='italic'>create by: {currentUser.username}</span> }
+            {createdBy && (
+              <span className="italic">create by: {createdBy.username}</span>
+            )}
             <span className="italic">
               {(post?.content.length / 1000).toFixed(0)}mins read
             </span>
@@ -91,12 +111,12 @@ const PostPage = () => {
               ></div>
             )}
             {!showMoreText && (
-               <span
-              onClick={() => setShowMoreText(true)}
-              className="uppercase font-medium text-blue-500 cursor-pointer opacity-80"
-            >
-              continue reading...
-            </span>
+              <span
+                onClick={() => setShowMoreText(true)}
+                className="uppercase font-medium text-blue-500 cursor-pointer opacity-80"
+              >
+                continue reading...
+              </span>
             )}
           </div>
 
