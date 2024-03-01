@@ -27,7 +27,7 @@ export const getComments = async (req, res, next) => {
     const sortDirection = req.query.sort === 'asc' ? 1 : -1
 
     const comments = await Comment.find({ postId: req.params.postId })
-      .sort({ createdAt: sortDirection})
+      .sort({ createdAt: sortDirection })
       .limit(limit)
       .skip(startIndex)
 
@@ -36,5 +36,25 @@ export const getComments = async (req, res, next) => {
     res.status(200).json(comments)
   } catch (error) {
     next(error)
+  }
+}
+
+export const likeComment = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId)
+    if (!comment) return next(handleError(404, 'Comment not found!'))
+    // check if a user has already like the comment
+    const userIndex = comment.likes.indexOf(req.user.id)
+    if (userIndex === -1) {
+      comment.numberOfLikes += 1 // add a like to the comment
+      comment.likes.push(req.user.id)
+    } else {
+      comment.likes.splice(userIndex, 1)
+      comment.numberOfLikes -= 1 //remove like from the comment
+    }
+    await comment.save()
+    res.status(200).json(comment)
+  } catch (err) {
+    next(err)
   }
 }
