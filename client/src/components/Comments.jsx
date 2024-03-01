@@ -1,11 +1,12 @@
 import { Alert, Button, FloatingLabel, Textarea, Spinner } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axiosRequest from '../utils/axiosRequest'
 import { HiInformationCircle } from 'react-icons/hi'
 import Comment from './Comment'
 
 const Comments = ({ postId }) => {
+  const navigate = useNavigate()
   const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
@@ -52,6 +53,29 @@ const Comments = ({ postId }) => {
     fetchComments()
   }, [postId])
 
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate('/login')
+        return
+      }
+      const res = await axiosRequest.put(`comment/like-comment/${commentId}`)
+
+      setComments(
+        comments.map((comment) =>
+          comment._id === commentId
+            ? {
+                ...comment,
+                likes: res.data.likes,
+                numberOfLikes: res.data.numberOfLikes,
+              }
+            : comments
+        )
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div>
@@ -144,22 +168,26 @@ const Comments = ({ postId }) => {
               icon={HiInformationCircle}
               onDismiss={() => setFetchCommentsError(null)}
             >
-              <span className="font-medium">Info alert!</span>{' '}
-              No comments yet!
+              <span className="font-medium">Info alert!</span> No comments yet!
             </Alert>
           ) : (
             <>
-             <div className="text-sm my-5 flex items-center gap-1">
-            <p>Comments</p>
-            <div className="border border-gray-400 py-1 px-2 rounded-sm">
-              <p>{comments.length}</p>
-            </div>
-           </div>
-           {comments.map((comment) => {
-              return <Comment comment={comment} key={comment._id} />
-           })}
+              <div className="text-sm my-5 flex items-center gap-1">
+                <p>Comments</p>
+                <div className="border border-gray-400 py-1 px-2 rounded-sm">
+                  <p>{comments.length}</p>
+                </div>
+              </div>
+              {comments.map((comment) => {
+                return (
+                  <Comment
+                    comment={comment}
+                    key={comment._id}
+                    onLike={handleLike}
+                  />
+                )
+              })}
             </>
-          
           )}
         </div>
       )}

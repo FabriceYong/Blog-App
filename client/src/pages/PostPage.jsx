@@ -88,7 +88,7 @@ const PostPage = () => {
           <div className="flex justify-between p-3 border-b border-slate-300 mx-auto w-full mx-w-2xl text-xs font-medium">
             <span>{new Date(post?.createdAt).toLocaleDateString()}</span>
             {createdBy && (
-              <span className="italic">create by: {createdBy.username}</span>
+              <span className="italic">create by: @<Link to={'/dashboard?tab=profile'}>{createdBy.username}</Link></span>
             )}
             <span className="italic">
               {(post?.content.length / 1000).toFixed(0)}mins read
@@ -123,7 +123,7 @@ const PostPage = () => {
           <div className="max-w-4xl mx-auto w-full">
             <CallToAction />
           </div>
-          <Comments postId={post._id} />
+          <Comments postId={post?._id} />
         </main>
       )}
     </div>
