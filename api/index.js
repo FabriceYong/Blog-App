@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser'
 import authRoutes from './routes/authRoutes.js'
 import userRoute from './routes/userRoute.js'
 import postRoute from './routes/postRoute.js'
-
+import commentRoute from './routes/commentRoute.js'
 
 
 const app = express()
@@ -35,6 +35,7 @@ app.use(cookieParser())
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoute)
 app.use('/api/post', postRoute)
+app.use('/api/comment', commentRoute)
 
 
 

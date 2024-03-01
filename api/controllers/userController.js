@@ -6,8 +6,6 @@ export const updateUser = async (req, res, next) => {
 
     if(req.user.id !== req.params.userId) return next(handleError(403, 'You are not allowed to update this user'))
 
-
-
     if(req.body.password?.length < 6) return next(handleError(400, 'Password must be at least 6 characters'))
 
     if(req.body.password) {
@@ -89,5 +87,16 @@ export const getUsers = async (req, res, next) => {
         })
     } catch (error) {
         next(error)
+    }
+}
+
+export const getUser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.userId)
+        const { password, ...rest } = user._doc
+
+        res.status(200).json(rest)
+    } catch(err) {
+        next(err)
     }
 }
