@@ -62,6 +62,7 @@ const PostPage = () => {
             color="failure"
             icon={HiInformationCircle}
             onDismiss={() => setError(null)}
+            className='max-w-3xl mx-auto text-wrap'
           >
             <span className="font-medium">Info alert!</span> Could not load this
             post, refresh or try again later

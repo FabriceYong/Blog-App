@@ -67,7 +67,7 @@ const Comments = ({ postId }) => {
             ? {
                 ...comment,
                 likes: res.data.likes,
-                numberOfLikes: res.data.numberOfLikes,
+                numberOfLikes: res.data.likes.length,
               }
             : comments
         )
@@ -75,6 +75,10 @@ const Comments = ({ postId }) => {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleEdit = (comment, editedContent) => {
+    setComments(comments.map((comm) => comm._id === comment._id ? { ...comm, content: editedContent} : comm ))
   }
 
   return (
@@ -184,6 +188,7 @@ const Comments = ({ postId }) => {
                     comment={comment}
                     key={comment._id}
                     onLike={handleLike}
+                    onEdit={handleEdit}
                   />
                 )
               })}
