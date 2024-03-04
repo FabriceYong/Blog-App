@@ -8,12 +8,13 @@ import { HiInformationCircle } from 'react-icons/hi'
 
 const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
 
-const Comment = ({ comment, onLike, onEdit }) => {
+const Comment = ({ comment, onLike, onEdit, onDelete }) => {
   const [user, setUser] = useState({})
   const [isEditing, setIsEditing] = useState(false)
   const [editedContent, setEditedContent] = useState(comment.content)
   const [error, setError] = useState(null)
-  const[loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,8 +38,6 @@ const Comment = ({ comment, onLike, onEdit }) => {
     try {
       setLoading(false)
       const res = await axiosRequest.put(`/comment/edit-comment/${comment._id}`, { content: editedContent })
-
-      console.log(res.data)
 
       setIsEditing(false)
       setLoading(false)
@@ -134,6 +133,7 @@ const Comment = ({ comment, onLike, onEdit }) => {
               <button
                 type="button"
                 className="text-red-500 hover:text-red-600 "
+                onClick={() => onDelete(comment._id)}
               >
                 <MdDelete />
               </button>
