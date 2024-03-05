@@ -12,6 +12,7 @@ import { HiInformationCircle } from 'react-icons/hi'
 import { CircularProgressbar } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 import axiosRequest from '../utils/axiosRequest'
+import { MdPostAdd } from 'react-icons/md'
 
 const DashProfile = () => {
   const navigate = useNavigate()
@@ -284,9 +285,9 @@ const DashProfile = () => {
             <Button
               type="button"
               gradientDuoTone={'purpleToBlue'}
-              className="w-full"
+              className="w-full flex items-center"
             >
-              Create a post
+              <MdPostAdd className='text-lg' /> <span className='ml-1'>Create a post</span>
             </Button>
           </Link>
         )}

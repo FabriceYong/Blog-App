@@ -9,6 +9,7 @@ import { HiInformationCircle } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { MdPostAdd } from 'react-icons/md'
 
 const CreatePost = () => {
   const navigate = useNavigate()
@@ -179,8 +180,8 @@ const CreatePost = () => {
           required
           onChange={(value) => setFormData({ ...formData, content: value })}
         />
-        <Button type="submit" gradientDuoTone={'purpleToPink'}>
-          Publish
+        <Button type="submit" gradientDuoTone={'purpleToPink'} className='flex items-center'>
+          <MdPostAdd className='text-lg' /><span className='ml-1'>Publish</span>
         </Button>
       </form>
     </div>

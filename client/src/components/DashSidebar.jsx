@@ -4,6 +4,7 @@ import { FaComment, FaSignInAlt, FaUser } from 'react-icons/fa'
 import { HiDocumentText, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axiosRequest from '../utils/axiosRequest'
+import { MdSpaceDashboard } from 'react-icons/md'
 
 const DashSidebar = () => {
   const location = useLocation()
@@ -34,43 +35,97 @@ const DashSidebar = () => {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup className='flex flex-col gap-1'>
+        <Sidebar.ItemGroup className="flex flex-col gap-1">
+          {/* sidebar profile */}
           <Link to={'/dashboard?tab=profile'}>
             <Sidebar.Item
               active={tab === 'profile'}
               icon={FaUser}
-              label={currentUser.isAdmin ? 'Admin' : "User"}
+              label={currentUser?.isAdmin ? 'Admin' : 'User'}
               labelColor="dark"
               as={'div'}
-              className={tab === 'profile' ? 'font-bold text-gray-600' : 'font-medium text-gray-700'}
+              className={
+                tab === 'profile'
+                  ? 'font-bold text-gray-600'
+                  : 'font-medium text-gray-700'
+              }
             >
               Profile
             </Sidebar.Item>
           </Link>
-          {currentUser.isAdmin && (
-            <Link to={'/dashboard?tab=posts'}>
-            <Sidebar.Item icon={HiDocumentText} active={tab === 'posts'} as='div' className={tab === 'posts' ? 'font-bold text-gray-700' : 'font-medium text-gray-600'}>
-              Posts
-            </Sidebar.Item>
-          </Link>
+
+          {/* sidebar dashboard */}
+          {currentUser?.isAdmin && (
+            <Link to={`/dashboard?tab=dashboard`}>
+              <Sidebar.Item
+                icon={MdSpaceDashboard}
+                active={tab === 'dashboard' || !tab}
+                as="div"
+                className={
+                  tab === 'dashboard'
+                    ? 'font-bold text-gray-700'
+                    : 'text-gray-600 font-medium'
+                }
+              >
+                Dashboard
+              </Sidebar.Item>
+            </Link>
           )}
 
-          {currentUser.isAdmin && (
+          {/* sidebar users */}
+          {currentUser?.isAdmin && (
             <Link to={'/dashboard?tab=users'}>
-              <Sidebar.Item icon={HiOutlineUserGroup} active={tab === 'users'} as='div' className={tab === 'users' ? 'font-bold text-gray-700' : 'font-medium text-gray-600'}>
+              <Sidebar.Item
+                icon={HiOutlineUserGroup}
+                active={tab === 'users'}
+                as="div"
+                className={
+                  tab === 'users'
+                    ? 'font-bold text-gray-700'
+                    : 'font-medium text-gray-600'
+                }
+              >
                 Users
               </Sidebar.Item>
             </Link>
           )}
 
-          {currentUser.isAdmin && (
+          {/* sidebar post */}
+          {currentUser?.isAdmin && (
+            <Link to={'/dashboard?tab=posts'}>
+              <Sidebar.Item
+                icon={HiDocumentText}
+                active={tab === 'posts'}
+                as="div"
+                className={
+                  tab === 'posts'
+                    ? 'font-bold text-gray-700'
+                    : 'font-medium text-gray-600'
+                }
+              >
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {/* sidebar comments */}
+          {currentUser?.isAdmin && (
             <Link to={'/dashboard?tab=comments'}>
-              <Sidebar.Item icon={FaComment} active={tab === 'comments'} as='div' className={tab === 'comments' ? 'font-bold text-gray-700' : 'font-medium text-gray-600'}>
+              <Sidebar.Item
+                icon={FaComment}
+                active={tab === 'comments'}
+                as="div"
+                className={
+                  tab === 'comments'
+                    ? 'font-bold text-gray-700'
+                    : 'font-medium text-gray-600'
+                }
+              >
                 Comments
               </Sidebar.Item>
             </Link>
           )}
-          
+
           <Sidebar.Item
             icon={FaSignInAlt}
             className="cursor-pointer font-medium text-red-500 dark:text-red-500"
