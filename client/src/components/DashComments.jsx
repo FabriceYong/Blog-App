@@ -3,30 +3,29 @@ import axiosRequest from '../utils/axiosRequest'
 import { Modal, Table, Button, Spinner, Alert } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiInformationCircle } from 'react-icons/hi'
+import { FaCheck, FaTimes } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-import { FaEdit } from 'react-icons/fa'
 
-const DashPosts = () => {
+const DashComments = () => {
   const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
-  const [userPosts, setUserPost] = useState([])
+  const [comments, setComments] = useState([])
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [postIdToDelete, setPostIdToDelete] = useState('')
+  const [commentIdToDelete, setCommentIdToDelete] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [deleteSuccess, setDeleteSuccess] = useState(false)
 
   // fetch user post using user id
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchComments = async () => {
       try {
         setLoading(true)
-        const res = await axiosRequest.get(
-          `/post/get-posts?userId=${currentUser._id}`
-        )
+        const res = await axiosRequest.get(`/comment/get-comments`)
 
-        setUserPost(res.data.posts)
+        setComments(res.data.comments)
 
-        if (res.data.posts.length < 9) {
+        if (res.data.comments.length < 9) {
           setShowMore(false)
         }
         setLoading(false)
@@ -35,40 +34,34 @@ const DashPosts = () => {
         setLoading(false)
       }
     }
-    if (currentUser.isAdmin) fetchPosts()
+    if (currentUser.isAdmin) fetchComments()
   }, [currentUser._id])
 
   // show more functionality
   const handleShowMore = async () => {
-    const startIndex = userPosts.length
+    const startIndex = comments.length
     try {
       const res = await axiosRequest.get(
-        `/post/get-posts?userId=${currentUser._id}&startIndex=${startIndex}`
+        `/comment/get-comments?startIndex=${startIndex}`
       )
 
-        setUserPost((prev) => [...prev, ...res.data.posts])
-        if (res.data.posts.length > 9) setShowMore(true)
-        setShowMore(false)
-      
+      setComments((prev) => [...prev, ...res.data.comments])
+      if (res.data.comments.length > 9) setShowMore(true)
+      setShowMore(false)
     } catch (error) {
       console.log(error.message)
     }
   }
 
-  const handleDeletePost = async () => {
+  const handleDeleteComment = async () => {
     setShowModal(false)
     try {
-      const res = await axiosRequest.delete(
-        `/post/delete-post/${postIdToDelete}/${currentUser._id}`
-      )
+      setDeleteSuccess(false)
+      const res = await axiosRequest.delete(`/comment/delete-comment/${commentIdToDelete}`)
 
-      if (res.data.success === false) {
-        setError(res.data.message)
-      } else {
-        setUserPost((prev) =>
-          prev.filter((post) => post._id !== postIdToDelete)
-        )
-      }
+      setComments((prev) => prev.filter((comment) => comment._id !== commentIdToDelete))
+      setShowModal(false)
+      setDeleteSuccess(true)
     } catch (error) {
       setError(error.response.data)
     }
@@ -87,76 +80,53 @@ const DashPosts = () => {
             Loading...
           </span>
         </div>
-      ) : currentUser.isAdmin && userPosts.length > 0 ? (
+      ) : currentUser.isAdmin && comments.length > 0 ? (
         <>
           <Table>
             <Table.Head>
               <Table.HeadCell>Date Updated</Table.HeadCell>
-              <Table.HeadCell>Post Image</Table.HeadCell>
-              <Table.HeadCell>Post Title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
+              <Table.HeadCell>Comment content</Table.HeadCell>
+              <Table.HeadCell>Number of Likes</Table.HeadCell>
+              <Table.HeadCell>PostId</Table.HeadCell>
+              <Table.HeadCell>UserId</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
-              <Table.HeadCell>
-                <span>Edit</span>
-              </Table.HeadCell>
             </Table.Head>
-            {userPosts.map((post) => (
-              <Table.Body className="divide-y" key={post._id}>
+            {comments.map((comment) => (
+              <Table.Body className="divide-y" key={comment._id}>
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
-                    {new Date(post.updatedAt).toLocaleDateString()}
+                    {new Date(comment.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-20 h-10 object-cover bg-gray-500 rounded-[4px]"
-                      />
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="font-medium hover:underline text-gray-800 dark:text-gray-100 capitalize"
-                      to={`/post/${post.slug}`}
-                    >
-                      {post.title}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{post.category}</Table.Cell>
+                  <Table.Cell className=''>{comment.content}</Table.Cell>
+                  <Table.Cell>{comment.numberOfLikes}</Table.Cell>
+                  <Table.Cell>{comment.postId}</Table.Cell>
+                  <Table.Cell>{comment.userId}</Table.Cell>
                   <Table.Cell className="cursor-pointer">
                     <span
                       onClick={() => {
                         setShowModal(true)
-                        setPostIdToDelete(post._id)
+                        setCommentIdToDelete(comment._id)
                       }}
-                      className="font-medium text-red-500 hover:underline"
+                      className="font-medium text-red-500"
                     >
                       <MdDelete className="text-lg" />
                     </span>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/update-post/${post._id}`}>
-                      <span className="text-teal-500 hover:underline">
-                        <FaEdit className="text-lg" />
-                      </span>
-                    </Link>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
             ))}
           </Table>
-          {showMore ? (
+          {showMore && (
             <button
               onClick={handleShowMore}
               className="w-full text-teal-500 self-center text-sm py-7 hover:underline"
             >
               Show more
             </button>
-          ) : null}
+          )}
         </>
       ) : (
-        <p className="text-center py-6 text-lg">
+        <span className="text-center py-6 text-lg">
           <Alert
             color="failure"
             icon={HiInformationCircle}
@@ -164,11 +134,9 @@ const DashPosts = () => {
             className="max-w-3xl mx-auto text-wrap"
           >
             <span className="font-bold mr-2">Info alert!</span>
-            <span>
-              Sorry! no posts found yet, refresh or try again later
-            </span>
+            <span>Sorry! no comments found yet, refresh or try again later</span>
           </Alert>
-        </p>
+        </span>
       )}
 
       <Modal
@@ -176,16 +144,17 @@ const DashPosts = () => {
         onClose={() => setShowModal(false)}
         popup
         size={'md'}
+        className="dark:text-gray-200"
       >
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
             <HiInformationCircle className="text-5xl mx-auto text-red-700" />
             <p className="my-5 text-lg text-gray-500 dark:text-gray-400">
-              Are you sure you want to delete this post?
+              Are you sure you want to delete this comment?
             </p>
             <div className="flex items-center justify-center gap-5">
-              <Button color="failure" onClick={handleDeletePost}>
+              <Button color="failure" onClick={handleDeleteComment}>
                 Yes, I'm sure
               </Button>
               <Button color="gray" outline onClick={() => setShowModal(false)}>
@@ -199,6 +168,6 @@ const DashPosts = () => {
   )
 }
 
-export default DashPosts
+export default DashComments
 
 // install tailwind-scrollbar

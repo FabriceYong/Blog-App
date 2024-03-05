@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
-import { FaSignInAlt, FaUser } from 'react-icons/fa'
+import { FaComment, FaSignInAlt, FaUser } from 'react-icons/fa'
 import { HiDocumentText, HiOutlineUserGroup, HiUser } from 'react-icons/hi'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axiosRequest from '../utils/axiosRequest'
@@ -59,6 +59,14 @@ const DashSidebar = () => {
             <Link to={'/dashboard?tab=users'}>
               <Sidebar.Item icon={HiOutlineUserGroup} active={tab === 'users'} as='div' className={tab === 'users' ? 'font-bold text-gray-700' : 'font-medium text-gray-600'}>
                 Users
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          {currentUser.isAdmin && (
+            <Link to={'/dashboard?tab=comments'}>
+              <Sidebar.Item icon={FaComment} active={tab === 'comments'} as='div' className={tab === 'comments' ? 'font-bold text-gray-700' : 'font-medium text-gray-600'}>
+                Comments
               </Sidebar.Item>
             </Link>
           )}

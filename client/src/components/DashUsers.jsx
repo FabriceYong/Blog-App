@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axiosRequest from '../utils/axiosRequest'
-import { Modal, Table, Button, Spinner } from 'flowbite-react'
+import { Modal, Table, Button, Spinner, Alert } from 'flowbite-react'
 import { Link } from 'react-router-dom'
 import { HiInformationCircle } from 'react-icons/hi'
 import { FaCheck, FaTimes } from 'react-icons/fa'
@@ -46,7 +46,8 @@ const DashUsers = () => {
       )
 
         setUsers((prev) => [...prev, ...res.data.users])
-        if (res.data.users.length < 9) setShowMore(false)
+        if (res.data.users.length < 9) setShowMore(true)
+        setShowMore(false)
   
     } catch (error) {
       console.log(error.message)
@@ -100,7 +101,7 @@ const DashUsers = () => {
               <Table.Body className="divide-y" key={user._id}>
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
-                    {new Date(user.updatedAt).toLocaleDateString()}
+                    {new Date(user.createdAt).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
                     <img
@@ -111,7 +112,13 @@ const DashUsers = () => {
                   </Table.Cell>
                   <Table.Cell>{user.username}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
-                  <Table.Cell>{user.isAdmin ? <FaCheck className='text-green-500' /> : <FaTimes className='text-red-500' />}</Table.Cell>
+                  <Table.Cell>
+                    {user.isAdmin ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
                   <Table.Cell className="cursor-pointer">
                     <span
                       onClick={() => {
@@ -120,25 +127,35 @@ const DashUsers = () => {
                       }}
                       className="font-medium text-red-500 hover:underline"
                     >
-                      <MdDelete className='text-lg'/>
+                      <MdDelete className="text-lg" />
                     </span>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
             ))}
           </Table>
-          {users.length > 9 && (
+          {showMore && (
             <button
               onClick={handleShowMore}
-              className="w-full text-teal-500 self-center text-sm py-7"
+              className="w-full text-teal-500 self-center text-sm py-7 hover:underline'"
             >
               Show more
             </button>
           )}
         </>
       ) : (
-        <p className="text-center text-gray-500 text-3xl font-medium">
-          Sorry! No users found yet
+        <p className="text-center py-6 text-lg">
+          <Alert
+            color="failure"
+            icon={HiInformationCircle}
+            onDismiss={() => setError(null)}
+            className="max-w-3xl mx-auto text-wrap"
+          >
+            <span className="font-bold mr-2">Info alert!</span>
+            <span>
+              Sorry! no users found yet, refresh or try again later
+            </span>
+          </Alert>
         </p>
       )}
 
@@ -147,7 +164,7 @@ const DashUsers = () => {
         onClose={() => setShowModal(false)}
         popup
         size={'md'}
-        className='dark:text-gray-200'
+        className="dark:text-gray-200"
       >
         <Modal.Header />
         <Modal.Body>
