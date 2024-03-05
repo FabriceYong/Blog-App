@@ -59,7 +59,7 @@ const DashboardComponent = () => {
       fetchPosts()
       fetchUsers()
     }
-  }, [currentUser])
+  }, [currentUser._id])
 
   return (
     <div className="p-3 md:mx-auto dark:text-gray-200 mb-8">
@@ -76,7 +76,7 @@ const DashboardComponent = () => {
             <HiOutlineUserGroup className="bg-teal-600 rounded-full text-5xl p-3 shadow-lg text-gray-200" />
           </div>
           <div className="flex gap-2 text-sm">
-            {(lastMonthUsers && lastMonthUsers > 0) && (
+            {lastMonthUsers > 0 && (
               <span className="text-green-500 flex items-center">
                 {lastMonthUsers}
                 <HiArrowUp />
@@ -98,7 +98,7 @@ const DashboardComponent = () => {
             <HiDocumentText className="bg-orange-600 rounded-full text-5xl p-3 shadow-lg text-gray-200" />
           </div>
           <div className="flex gap-2 text-sm">
-            {(lastMonthPosts && lastMonthPosts > 0) && (
+            {lastMonthPosts > 0 && (
               <span className="text-green-500 flex items-center">
                 {lastMonthPosts}
                 <HiArrowUp />
@@ -120,11 +120,11 @@ const DashboardComponent = () => {
             <FaComment className="bg-yellow-600 rounded-full text-5xl p-3 shadow-lg text-gray-200" />
           </div>
           <div className="flex gap-2 text-sm">
-            {(lastMonthComments && lastMonthComments > 0) && (
-                <span className="text-green-500 flex items-center">
-              {lastMonthComments}
-              <HiArrowUp />
-            </span>
+            {lastMonthComments > 0 && (
+              <span className="text-green-500 flex items-center">
+                {lastMonthComments}
+                <HiArrowUp />
+              </span>
             )}
             <div className="text-gray-500 dark:text-gray-300">Last Month</div>
           </div>
