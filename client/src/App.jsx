@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp'
 import Dashboard from './pages/Dashboard'
 import Projects from './pages/Projects'
 import CreatePost from './pages/CreatePost'
+import Search from './pages/Search'
 
 // components
 import Navbar from './components/Navbar'
@@ -17,6 +18,7 @@ import AdminPrivateRoute from './components/AdminPrivateRoute'
 import UpdatePost from './components/UpdatePost'
 import PostPage from './pages/PostPage'
 import ScrollToTop from './components/ScrollToTop'
+
 
 
 const Layout = () => {
@@ -46,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <SignUp />,
+      },
+      {
+        path: '/search',
+        element: <Search />
       },
       {
         element: <PrivateRoute />,

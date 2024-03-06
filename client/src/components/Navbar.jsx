@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CiSearch } from 'react-icons/ci'
@@ -7,11 +7,22 @@ import { useGlobalContext } from '../Context'
 import axiosRequest from '../utils/axiosRequest'
 
 const Header = () => {
-  const navigate = useNavigate()
   const path = useLocation().pathname
   const { theme, setTheme } = useGlobalContext()
+  const [searchTerm, setSearchTerm] = useState('')
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const currentUser = JSON.parse(sessionStorage.getItem('currentUser'))
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search)
+    const searchTermFromUrl = urlParams.get('searchTerm')
+
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl)
+    }
+  }, [location.search])
 
   const handleLogout = async () => {
     try {
@@ -29,6 +40,15 @@ const Header = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const urlParams = new URLSearchParams(location.search)
+    urlParams.set('searchTerm', searchTerm)
+
+    const searchQuery = urlParams.toString()
+    navigate(`/search?${searchQuery}`)
+  }
+
   return (
     <Navbar className="border-b sticky top-0 z-[1000]">
       <Link
@@ -40,17 +60,22 @@ const Header = () => {
         </span>
         Blog
       </Link>
-      <form>
+      <form onSubmit={handleSubmit}>
         <TextInput
           type="text"
+          value={searchTerm}
           placeholder="Search..."
           rightIcon={CiSearch}
           className="hidden lg:inline"
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
-      <Button className="w-12 h-10 lg:hidden p-0" color="gray" pill>
-        <CiSearch />
-      </Button>
+      <Link to={'/search'}>
+        <Button className="w-12 h-10 lg:hidden p-0" color="gray" pill>
+          <CiSearch />
+        </Button>
+      </Link>
+
       <div className="flex gap-2 md:order-2 items-center">
         {theme === 'light' ? (
           <Button
@@ -89,7 +114,7 @@ const Header = () => {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             {currentUser.isAdmin && (
-              <Link to='/dashboard'>
+              <Link to="/dashboard">
                 <Dropdown.Item>Dashboard</Dropdown.Item>
               </Link>
             )}

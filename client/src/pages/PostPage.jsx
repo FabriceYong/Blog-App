@@ -76,8 +76,6 @@ const PostPage = () => {
         <p className="text-center py-6 text-lg text-red-500 font-medium">
           <Alert
             color="failure"
-            icon={HiInformationCircle}
-            onDismiss={() => setError(null)}
             className="max-w-3xl mx-auto text-wrap"
           >
             <span className="font-bold mr-2">Info alert!</span><span>Could not load this post, refresh or try again later</span> 

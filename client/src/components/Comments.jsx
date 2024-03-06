@@ -201,8 +201,6 @@ const Comments = ({ postId }) => {
           {comments.length <= 0 ? (
             <Alert
               color="warning"
-              icon={HiInformationCircle}
-              onDismiss={() => setFetchCommentsError(null)}
               className='mx-auto max-w-3xl'
             >
               <span className="font-medium">Info alert!</span> No comments yet!
