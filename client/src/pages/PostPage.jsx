@@ -63,7 +63,7 @@ const PostPage = () => {
   }, [])
 
   return (
-    <div className="dark:text-gray-200">
+    <div className="min-h-screen dark:text-gray-200">
       {loading ? (
         <div className="flex items-center gap-3 my-4 justify-center min-h-screen">
           <Spinner

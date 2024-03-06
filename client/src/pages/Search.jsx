@@ -111,7 +111,7 @@ const Search = () => {
   console.log(posts)
 
   return (
-    <div className="dark:text-gray-200 flex flex-col md:flex-row">
+    <div className="min-h-screen dark:text-gray-200 flex flex-col md:flex-row">
       <div className="p-7 border-b md:border-r md:min-h-screen border-gray-300 dark:border-gray-600">
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* search using a search term */}
