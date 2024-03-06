@@ -155,7 +155,9 @@ const DashboardComponent = () => {
                         className="w-10 h-10 rounded-full bg-gray-500 object-cover"
                       />
                     </Table.Cell>
-                    <Table.Cell>{user?.username}</Table.Cell>
+                    <Table.Cell className="dark:text-gray-300">
+                      {user?.username}
+                    </Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}
@@ -179,7 +181,7 @@ const DashboardComponent = () => {
             {posts &&
               posts.map((post) => (
                 <Table.Body key={post?._id}>
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     <Table.Cell>
                       <Link to={`/post/${post?.slug}`}>
                         <img
@@ -228,7 +230,7 @@ const DashboardComponent = () => {
             {comments &&
               comments.map((comment) => (
                 <Table.Body key={comment?._id}>
-                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     <Table.Cell className="w-96 line-clamp-2">
                       {comment?.content}
                     </Table.Cell>
