@@ -27,7 +27,7 @@ const Home = () => {
   }, [])
 
   return (
-    <div className="dark:text-gray-200 mb-10">
+    <div className="dark:text-gray-200 mb-10 min-h-screen">
       <div className="flex flex-col gap-6 px-4 p-28 mx-auto items-center">
         <h1 className="text-3xl font-bold lg:text-6xl sm:text-5xl">Welcome to my blog</h1>
         <p className='text-gray-500 text-xs sm:text-sm'>

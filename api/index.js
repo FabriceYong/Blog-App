@@ -4,6 +4,7 @@ import 'dotenv/config.js'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import path from 'path'
 
 //routes
 import authRoutes from './routes/authRoutes.js'
@@ -18,6 +19,7 @@ const port = process.env.PORT || 8000
 // connection function
 connectDB()
 
+const __dirname = path.resolve()
 //cors
 // app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 app.use((req, res, next) => {
@@ -37,7 +39,11 @@ app.use('/api/user', userRoute)
 app.use('/api/post', postRoute)
 app.use('/api/comment', commentRoute)
 
+app.use(express.static(path.join(__dirname, '/client/dist')))
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', index.html))
+})
 
 // error status handler
 app.use((err, req, res, next) => {
